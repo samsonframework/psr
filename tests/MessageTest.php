@@ -19,12 +19,25 @@ class MessageTest extends \PHPUnit_Framework_TestCase
 
     public function testProtocolVersion()
     {
+        // Check original message protocol version
+        $this->assertEquals('1.0', $this->message->getProtocolVersion());
+    }
+
+    public function testProtocolVersionChange()
+    {
         // Create new message with new protocol version
         $newMessage = $this->message->withProtocolVersion('1.1');
 
         // Check new message protocol version
         $this->assertEquals('1.1', $newMessage->getProtocolVersion());
-        // Check original message protocol version
-        $this->assertEquals('1.0', $this->message->getProtocolVersion());
+    }
+
+    /**
+     * @expectedException \samsonframework\psr\exception\ProtocolVersionNotSupported
+     */
+    public function testException()
+    {
+        // Create new message with new protocol version
+        $newMessage = $this->message->withProtocolVersion('2.1');
     }
 }
