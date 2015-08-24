@@ -126,7 +126,14 @@ class Message implements \Psr\Http\Message\MessageInterface
      */
     public function getHeader($name)
     {
-        // TODO: Implement getHeader() method.
+        // Try to point to searched header by name
+        $pointer = & $this->headers[strtolower($name)];
+
+        if (isset($pointer)) {
+            return $pointer[1];
+        }
+
+        return array();
     }
 
     /**
