@@ -41,10 +41,14 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $newMessage = $this->message->withProtocolVersion('2.1');
     }
 
-    public function testHeaderSetup()
+    public function testWithHeader()
     {
         // Create new message with new protocol version
         $newMessage = $this->message->withHeader('Content-type', 'text/plain');
+        $newMessage2 = $newMessage->withHeader('Content-type', 'TEXT/PLAIN');
+
+        $this->assertEquals(array('text/plain'), $newMessage->getHeader('content-type'));
+        $this->assertEquals(array('TEXT/PLAIN'), $newMessage2->getHeader('content-type'));
     }
 
     public function testGetHeader()
