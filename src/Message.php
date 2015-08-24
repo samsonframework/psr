@@ -186,6 +186,10 @@ class Message implements MessageInterface
         // Cast value to array
         $value = is_array($value) ? $value : array($value);
 
+        if (!$this->isValidHeaderValue($value)) {
+            throw new \InvalidArgumentException('Header['.$name.'] value ['.implode(',',$value).'] is invalid');
+        }
+
         // Store header by case-insensitive name, add array with original casing name and values collection
         $newMessage->headers[strtolower($name)] = array($name, $value);
 
@@ -217,11 +221,18 @@ class Message implements MessageInterface
         // Get pointer to message header element
         $header = & $newMessage->getHeaderItem($name);
 
+        // Cast value to array
+        $value = is_array($value) ? $value : array($value);
+
+        if (!$this->isValidHeaderValue($value)) {
+            throw new \InvalidArgumentException('Header['.$name.'] value ['.implode(',',$value).'] is invalid');
+        }
+
         // There were no such header before
         if ($header === null) {
             return $newMessage->withHeader($name, $value);
-        } else { // Header already exists - merger value arrays with value array casting
-            $header[1] = array_merge($header[1], is_array($value) ? $value : array($value));
+        } else { // Header already exists - merge value array
+            $header[1] = array_merge($header[1], $value);
         }
 
         // Chaining
@@ -282,6 +293,43 @@ class Message implements MessageInterface
         $newMessage->body = $body;
 
         return $newMessage;
+    }
+
+    /**
+     * Validate a header value.
+     *
+     * Per RFC 7230, only VISIBLE ASCII characters, spaces, and horizontal
+     * tabs are allowed in values; header continuations MUST consist of
+     * a single CRLF sequence followed by a space or horizontal tab.
+     *
+     * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
+     * @see https://github.com/zendframework/zend-diactoros/blob/master/src/HeaderSecurity.php
+     * @param string[] $values
+     * @return bool
+     */
+    protected function isValidHeaderValue(array $values)
+    {
+        foreach ($values as $value) {
+            $value = (string)$value;
+            // Look for:
+            // \n not preceded by \r, OR
+            // \r not followed by \n, OR
+            // \r\n not followed by space or horizontal tab; these are all CRLF attacks
+            if (preg_match("#(?:(?:(?<!\r)\n)|(?:\r(?!\n))|(?:\r\n(?![ \t])))#", $value)) {
+                return false;
+            }
+            // Non-visible, non-whitespace characters
+            // 9 === horizontal tab
+            // 10 === line feed
+            // 13 === carriage return
+            // 32-126, 128-254 === visible
+            // 127 === DEL (disallowed)
+            // 255 === null byte (disallowed)
+            if (preg_match('/[^\x09\x0a\x0d\x20-\x7E\x80-\xFE]/', $value)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

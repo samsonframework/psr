@@ -33,6 +33,9 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('1.1', $newMessage->getProtocolVersion());
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testWithHeader()
     {
         // Create new message with new header
@@ -41,6 +44,9 @@ class MessageTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(array('text/plain'), $newMessage->getHeader('content-type'));
         $this->assertEquals(array('TEXT/PLAIN'), $newMessage2->getHeader('content-type'));
+
+        // Invalid header value
+        $newMessage3 = $newMessage2->withAddedHeader('Content-Encoding', 'gzip'."\r");
     }
 
     public function testGetHeader()
@@ -79,6 +85,9 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey('Content-Encoding', $headers);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testWithAddedHeader()
     {
         // Create new message with new header
@@ -89,6 +98,9 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('text/plain'), $newMessage->getHeader('content-type'));
         $this->assertEquals(array('text/plain', 'XML/PLAIN'), $newMessage2->getHeader('content-type'));
         $this->assertEquals(array('gzip'), $newMessage3->getHeader('content-encoding'));
+
+        // Invalid header value
+        $newMessage4 = $newMessage3->withAddedHeader('Content-Encoding', 'gzip'."\r");
     }
 
     public function testWithoutHeader()
