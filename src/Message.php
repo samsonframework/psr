@@ -16,7 +16,7 @@ class Message implements \Psr\Http\Message\MessageInterface
     /** @var string HTTP protocol version */
     protected $protocolVersion = '1.0';
 
-    /** @var string HTTP message body */
+    /** @var \Psr\Http\Message\StreamInterface HTTP message body */
     protected $body;
 
     /**
@@ -259,7 +259,7 @@ class Message implements \Psr\Http\Message\MessageInterface
      */
     public function getBody()
     {
-        // TODO: Implement getBody() method.
+        return $this->body;
     }
 
     /**
@@ -277,7 +277,12 @@ class Message implements \Psr\Http\Message\MessageInterface
      */
     public function withBody(StreamInterface $body)
     {
-        // TODO: Implement withBody() method.
+        // Create new message clone
+        $newMessage = clone $this;
+
+        $this->body = $body;
+
+        return $newMessage;
     }
 
     /**
