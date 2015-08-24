@@ -56,7 +56,7 @@ class Message implements \Psr\Http\Message\MessageInterface
         // Check if version passed is supported
         if (in_array($version, $this->availableProtocolVersions)) {
             // Create new HTTP message
-            $message = new Message();
+            $message = clone $this;
             $message->protocolVersion = $version;
             return $message;
         } else {
@@ -167,6 +167,9 @@ class Message implements \Psr\Http\Message\MessageInterface
      */
     public function withHeader($name, $value)
     {
+        $newMessage = clone $this;
+        //$newMessage
+
         // TODO: Implement withHeader() method.
     }
 
