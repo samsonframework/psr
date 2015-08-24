@@ -107,7 +107,7 @@ class Message implements \Psr\Http\Message\MessageInterface
      */
     public function hasHeader($name)
     {
-        // TODO: Implement hasHeader() method.
+        return isset($this->headers[strtolower($name)]);
     }
 
     /**

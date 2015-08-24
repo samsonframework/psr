@@ -62,4 +62,12 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('text/plain,json/application', $newMessage->getHeaderLine('content-type'));
         $this->assertEquals('text/plain,json/application', $newMessage->getHeaderLine('cOntent-Type'));
     }
+
+    public function testHasHeader()
+    {
+        // Create new message with new protocol version
+        $newMessage = $this->message->withHeader('Content-type', 'text/plain');
+        $this->assertEquals(true, $newMessage->hasHeader('content-type'));
+        $this->assertEquals(false, $newMessage->hasHeader('set-cookie'));
+    }
 }
