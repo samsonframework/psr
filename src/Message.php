@@ -16,9 +16,6 @@ class Message implements \Psr\Http\Message\MessageInterface
     /** @var string HTTP protocol version */
     protected $protocolVersion = '1.0';
 
-    /** @var array Collection of supported HTTP protocol versions */
-    protected $availableProtocolVersions = array('0.9', '1.0', '1.1', '2.0');
-
     /** @var string HTTP message body */
     protected $body;
 
@@ -50,21 +47,15 @@ class Message implements \Psr\Http\Message\MessageInterface
      * immutability of the message, and MUST return an instance that has the
      * new protocol version.
      *
-     * @throws ProtocolVersionNotSupported
      * @param string $version HTTP protocol version
      * @return self
      */
     public function withProtocolVersion($version)
     {
-        // Check if version passed is supported
-        if (in_array($version, $this->availableProtocolVersions)) {
-            // Create new HTTP message
-            $message = clone $this;
-            $message->protocolVersion = $version;
-            return $message;
-        } else {
-            throw new ProtocolVersionNotSupported();
-        }
+        // Create new HTTP message
+        $message = clone $this;
+        $message->protocolVersion = $version;
+        return $message;
     }
 
     /**

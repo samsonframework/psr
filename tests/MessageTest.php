@@ -32,18 +32,9 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('1.1', $newMessage->getProtocolVersion());
     }
 
-    /**
-     * @expectedException \samsonframework\psr\exception\ProtocolVersionNotSupported
-     */
-    public function testProtocolVersionException()
-    {
-        // Create new message with new protocol version
-        $newMessage = $this->message->withProtocolVersion('2.1');
-    }
-
     public function testWithHeader()
     {
-        // Create new message with new protocol version
+        // Create new message with new header
         $newMessage = $this->message->withHeader('Content-type', 'text/plain');
         $newMessage2 = $newMessage->withHeader('Content-type', 'TEXT/PLAIN');
 
@@ -53,7 +44,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
 
     public function testGetHeader()
     {
-        // Create new message with new protocol version
+        // Create new message with new header
         $newMessage = $this->message->withHeader('Content-type', 'text/plain');
         $this->assertEquals(array('text/plain'), $newMessage->getHeader('content-type'));
         $this->assertEquals(array('text/plain'), $newMessage->getHeader('cOntent-tYpe'));
@@ -61,7 +52,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
 
     public function testHeaderGetLine()
     {
-        // Create new message with new protocol version
+        // Create new message with new header
         $newMessage = $this->message->withHeader('Content-type', array('text/plain', 'json/application'));
         $this->assertEquals('text/plain,json/application', $newMessage->getHeaderLine('content-type'));
         $this->assertEquals('text/plain,json/application', $newMessage->getHeaderLine('cOntent-Type'));
@@ -69,7 +60,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
 
     public function testHasHeader()
     {
-        // Create new message with new protocol version
+        // Create new message with new header
         $newMessage = $this->message->withHeader('Content-type', 'text/plain');
         $this->assertEquals(true, $newMessage->hasHeader('content-type'));
         $this->assertEquals(false, $newMessage->hasHeader('set-cookie'));
@@ -77,7 +68,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
 
     public function testGetHeaders()
     {
-        // Create new message with new protocol version
+        // Create new message with new header
         $newMessage = $this->message->withHeader('Content-type', 'text/plain');
         $newMessage = $newMessage->withHeader('content-Encoding', 'gzip');
 
