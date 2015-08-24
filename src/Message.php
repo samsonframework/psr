@@ -280,7 +280,7 @@ class Message implements \Psr\Http\Message\MessageInterface
         // Create new message clone
         $newMessage = clone $this;
 
-        $this->body = $body;
+        $newMessage->body = $body;
 
         return $newMessage;
     }

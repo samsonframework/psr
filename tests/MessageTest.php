@@ -1,5 +1,6 @@
 <?php
 namespace tests;
+use samsonframework\psr\Stream;
 
 /**
  * Created by Vitaly Iegorov <egorov@samsonos.com>
@@ -98,5 +99,15 @@ class MessageTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(array('text/plain'), $newMessage->getHeader('content-type'));
         $this->assertEquals(array(), $newMessage2->getHeader('content-type'));
+    }
+
+    public function testWithBody()
+    {
+        $body = new Stream();
+
+        // Create new message with new header
+        $newMessage = $this->message->withBody($body);
+
+        $this->assertEquals($body, $newMessage->getBody());
     }
 }
