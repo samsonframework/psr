@@ -59,6 +59,6 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         // Create new message with new protocol version
         $newMessage = $this->message->withHeader('Content-type', array('text/plain', 'json/application'));
         $this->assertEquals('text/plain,json/application', $newMessage->getHeaderLine('content-type'));
-
+        $this->assertEquals('text/plain,json/application', $newMessage->getHeaderLine('cOntent-Type'));
     }
 }
