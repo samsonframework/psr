@@ -103,7 +103,7 @@ class Message implements \Psr\Http\Message\MessageInterface
      */
     public function hasHeader($name)
     {
-        return isset($this->headers[strtolower($name)]);
+        return null !== $this->getHeaderItem($name);
     }
 
     /**
@@ -123,7 +123,7 @@ class Message implements \Psr\Http\Message\MessageInterface
     public function getHeader($name)
     {
         // Try to point to searched header by name
-        $pointer = & $this->headers[strtolower($name)];
+        $pointer = $this->getHeaderItem($name);
 
         if (isset($pointer)) {
             return $pointer[1];
@@ -154,7 +154,7 @@ class Message implements \Psr\Http\Message\MessageInterface
     public function getHeaderLine($name)
     {
         // Try to point to searched header by name
-        $pointer = & $this->headers[strtolower($name)];
+        $pointer = $this->getHeaderItem($name);
 
         if (isset($pointer)) {
             // Concatenate values with comma
@@ -258,5 +258,16 @@ class Message implements \Psr\Http\Message\MessageInterface
     public function withBody(StreamInterface $body)
     {
         // TODO: Implement withBody() method.
+    }
+
+    /**
+     * Retrieve header data item with case-insensitive header name
+     * @param string $name Case-insesitive header name
+     * @return array Header data item(0=>CASE_SENSITIVE_NAME, 1=>ARRAY_OF_VALUES)
+     */
+    private function & getHeaderItem($name)
+    {
+        // Try to point to searched header by name
+        return $this->headers[strtolower($name)];
     }
 }
