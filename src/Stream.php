@@ -8,9 +8,13 @@
 namespace samsonframework\psr;
 
 use Psr\Http\Message\StreamInterface;
+use RuntimeException;
 
 class Stream implements StreamInterface
 {
+    /** @var resource */
+    protected $resource;
+
     /**
      * Reads all data from the stream into a string, from the beginning to end.
      *
@@ -37,7 +41,12 @@ class Stream implements StreamInterface
      */
     public function close()
     {
-        // TODO: Implement close() method.
+        if (!$this->resource) {
+            return;
+        }
+
+        $resource = $this->detach();
+        fclose($resource);
     }
 
     /**
@@ -49,7 +58,9 @@ class Stream implements StreamInterface
      */
     public function detach()
     {
-        // TODO: Implement detach() method.
+        $resource = $this->resource;
+        $this->resource = null;
+        return $resource;
     }
 
     /**
@@ -59,7 +70,11 @@ class Stream implements StreamInterface
      */
     public function getSize()
     {
-        // TODO: Implement getSize() method.
+        if (null === $this->resource) {
+            return null;
+        }
+        $stats = fstat($this->resource);
+        return $stats['size'];
     }
 
     /**
@@ -70,7 +85,16 @@ class Stream implements StreamInterface
      */
     public function tell()
     {
-        // TODO: Implement tell() method.
+        if (!$this->resource) {
+            throw new \RuntimeException('No resource available; cannot tell position');
+        }
+
+        $result = ftell($this->resource);
+        if (!is_int($result)) {
+            throw new \RuntimeException('Error occurred during tell operation');
+        }
+
+        return $result;
     }
 
     /**
@@ -80,7 +104,11 @@ class Stream implements StreamInterface
      */
     public function eof()
     {
-        // TODO: Implement eof() method.
+        if (!$this->resource) {
+            return true;
+        }
+
+        return feof($this->resource);
     }
 
     /**
@@ -90,7 +118,11 @@ class Stream implements StreamInterface
      */
     public function isSeekable()
     {
-        // TODO: Implement isSeekable() method.
+        if (!$this->resource) {
+            return false;
+        }
+        $meta = stream_get_meta_data($this->resource);
+        return $meta['seekable'];
     }
 
     /**
@@ -107,7 +139,18 @@ class Stream implements StreamInterface
      */
     public function seek($offset, $whence = SEEK_SET)
     {
-        // TODO: Implement seek() method.
+        if (!$this->resource) {
+            throw new RuntimeException('No resource available; cannot seek position');
+        }
+
+        if (!$this->isSeekable()) {
+            throw new RuntimeException('Stream is not seekable');
+        }
+
+        $result = fseek($this->resource, $offset, $whence);
+        if (0 !== $result) {
+            throw new RuntimeException('Error seeking within stream');
+        }
     }
 
     /**
@@ -122,7 +165,7 @@ class Stream implements StreamInterface
      */
     public function rewind()
     {
-        // TODO: Implement rewind() method.
+        $this->seek(0);
     }
 
     /**
@@ -132,7 +175,20 @@ class Stream implements StreamInterface
      */
     public function isWritable()
     {
-        // TODO: Implement isWritable() method.
+        if (! $this->resource) {
+            return false;
+        }
+
+        $meta = stream_get_meta_data($this->resource);
+        $mode = $meta['mode'];
+
+        return (
+            strstr($mode, 'x')
+            || strstr($mode, 'w')
+            || strstr($mode, 'c')
+            || strstr($mode, 'a')
+            || strstr($mode, '+')
+        );
     }
 
     /**
@@ -144,7 +200,20 @@ class Stream implements StreamInterface
      */
     public function write($string)
     {
-        // TODO: Implement write() method.
+        if (! $this->resource) {
+            throw new RuntimeException('No resource available; cannot write');
+        }
+
+        if (! $this->isWritable()) {
+            throw new RuntimeException('Stream is not writable');
+        }
+
+        $result = fwrite($this->resource, $string);
+        if (false === $result) {
+            throw new RuntimeException('Error writing to stream');
+        }
+
+        return $result;
     }
 
     /**
@@ -154,7 +223,14 @@ class Stream implements StreamInterface
      */
     public function isReadable()
     {
-        // TODO: Implement isReadable() method.
+        if (! $this->resource) {
+            return false;
+        }
+
+        $meta = stream_get_meta_data($this->resource);
+        $mode = $meta['mode'];
+
+        return (strstr($mode, 'r') || strstr($mode, '+'));
     }
 
     /**
@@ -169,7 +245,20 @@ class Stream implements StreamInterface
      */
     public function read($length)
     {
-        // TODO: Implement read() method.
+        if (! $this->resource) {
+            throw new RuntimeException('No resource available; cannot read');
+        }
+
+        if (! $this->isReadable()) {
+            throw new RuntimeException('Stream is not readable');
+        }
+
+        $result = fread($this->resource, $length);
+        if (false === $result) {
+            throw new RuntimeException('Error reading stream');
+        }
+
+        return $result;
     }
 
     /**
@@ -181,7 +270,16 @@ class Stream implements StreamInterface
      */
     public function getContents()
     {
-        // TODO: Implement getContents() method.
+        if (! $this->isReadable()) {
+            throw new RuntimeException('Stream is not readable');
+        }
+
+        $result = stream_get_contents($this->resource);
+        if (false === $result) {
+            throw new RuntimeException('Error reading from stream');
+        }
+
+        return $result;
     }
 
     /**
@@ -198,6 +296,15 @@ class Stream implements StreamInterface
      */
     public function getMetadata($key = null)
     {
-        // TODO: Implement getMetadata() method.
+        if (null === $key) {
+            return stream_get_meta_data($this->resource);
+        }
+
+        $metadata = stream_get_meta_data($this->resource);
+        if (! array_key_exists($key, $metadata)) {
+            return null;
+        }
+
+        return $metadata[$key];
     }
 }
