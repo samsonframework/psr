@@ -31,7 +31,16 @@ class Stream implements StreamInterface
      */
     public function __toString()
     {
-        // TODO: Implement __toString() method.
+        if (!$this->isReadable()) {
+            return '';
+        }
+
+        try {
+            $this->rewind();
+            return $this->getContents();
+        } catch (RuntimeException $e) {
+            return '';
+        }
     }
 
     /**
@@ -175,7 +184,7 @@ class Stream implements StreamInterface
      */
     public function isWritable()
     {
-        if (! $this->resource) {
+        if (!$this->resource) {
             return false;
         }
 
@@ -200,11 +209,11 @@ class Stream implements StreamInterface
      */
     public function write($string)
     {
-        if (! $this->resource) {
+        if (!$this->resource) {
             throw new RuntimeException('No resource available; cannot write');
         }
 
-        if (! $this->isWritable()) {
+        if (!$this->isWritable()) {
             throw new RuntimeException('Stream is not writable');
         }
 
@@ -223,7 +232,7 @@ class Stream implements StreamInterface
      */
     public function isReadable()
     {
-        if (! $this->resource) {
+        if (!$this->resource) {
             return false;
         }
 
@@ -245,11 +254,11 @@ class Stream implements StreamInterface
      */
     public function read($length)
     {
-        if (! $this->resource) {
+        if (!$this->resource) {
             throw new RuntimeException('No resource available; cannot read');
         }
 
-        if (! $this->isReadable()) {
+        if (!$this->isReadable()) {
             throw new RuntimeException('Stream is not readable');
         }
 
@@ -270,7 +279,7 @@ class Stream implements StreamInterface
      */
     public function getContents()
     {
-        if (! $this->isReadable()) {
+        if (!$this->isReadable()) {
             throw new RuntimeException('Stream is not readable');
         }
 
@@ -301,7 +310,7 @@ class Stream implements StreamInterface
         }
 
         $metadata = stream_get_meta_data($this->resource);
-        if (! array_key_exists($key, $metadata)) {
+        if (!array_key_exists($key, $metadata)) {
             return null;
         }
 
