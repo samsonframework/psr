@@ -212,7 +212,21 @@ class Message implements \Psr\Http\Message\MessageInterface
      */
     public function withAddedHeader($name, $value)
     {
-        // TODO: Implement withAddedHeader() method.
+        // Create new message clone
+        $newMessage = clone $this;
+
+        // Get pointer to message header element
+        $header = & $newMessage->getHeaderItem($name);
+
+        // There were no such header before
+        if ($header === null) {
+            return $newMessage->withHeader($name, $value);
+        } else { // Header already exists - merger value arrays with value array casting
+            $header[1] = array_merge($header[1], is_array($value) ? $value : array($value));
+        }
+
+        // Chaining
+        return $newMessage;
     }
 
     /**
