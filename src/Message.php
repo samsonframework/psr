@@ -9,9 +9,8 @@ namespace samsonframework\psr;
 
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
-use samsonframework\psr\exception\ProtocolVersionNotSupported;
 
-class Message implements \Psr\Http\Message\MessageInterface
+class Message implements MessageInterface
 {
     /** @var string HTTP protocol version */
     protected $protocolVersion = '1.0';
@@ -287,7 +286,7 @@ class Message implements \Psr\Http\Message\MessageInterface
 
     /**
      * Retrieve header data item with case-insensitive header name
-     * @param string $name Case-insesitive header name
+     * @param string $name Case-insensitive header name
      * @return array Header data item(0=>CASE_SENSITIVE_NAME, 1=>ARRAY_OF_VALUES)
      */
     private function & getHeaderItem($name)
