@@ -18,7 +18,7 @@
     "autoload" : {
         "classmap": ["src/"],
         "psr-4": {
-            "samsonframework\\psr": "src/"
+            "samsonframework\\psr\\": "src/"
         }
     },
     "config":{
