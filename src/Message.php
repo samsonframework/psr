@@ -243,7 +243,13 @@ class Message implements \Psr\Http\Message\MessageInterface
      */
     public function withoutHeader($name)
     {
-        // TODO: Implement withoutHeader() method.
+        // Create new message clone
+        $newMessage = clone $this;
+
+        // Remove header element
+        unset($newMessage->headers[strtolower($name)]);
+
+        return $newMessage;
     }
 
     /**

@@ -89,4 +89,14 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('text/plain', 'XML/PLAIN'), $newMessage2->getHeader('content-type'));
         $this->assertEquals(array('gzip'), $newMessage3->getHeader('content-encoding'));
     }
+
+    public function testWithoutHeader()
+    {
+        // Create new message with new header
+        $newMessage = $this->message->withAddedHeader('Content-type', 'text/plain');
+        $newMessage2 = $newMessage->withoutHeader('Content-type');
+
+        $this->assertEquals(array('text/plain'), $newMessage->getHeader('content-type'));
+        $this->assertEquals(array(), $newMessage2->getHeader('content-type'));
+    }
 }
