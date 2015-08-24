@@ -22,7 +22,10 @@ class Message implements \Psr\Http\Message\MessageInterface
     /** @var string HTTP message body */
     protected $body;
 
-    /** @var array HTTP message headers collection */
+    /**
+     * @var array HTTP message headers collection, keys are case-insensitive(lowercase),
+     * array[0] - original header with casing, array[1] - collection of header values
+     */
     protected $headers = array();
 
     /**
@@ -147,7 +150,15 @@ class Message implements \Psr\Http\Message\MessageInterface
      */
     public function getHeaderLine($name)
     {
-        // TODO: Implement getHeaderLine() method.
+        // Try to point to searched header by name
+        $pointer = & $this->headers[strtolower($name)];
+
+        if (isset($pointer)) {
+            // Concatenate values with comma
+            return implode(',', $pointer[1]);
+        }
+
+        return '';
     }
 
     /**
@@ -167,10 +178,17 @@ class Message implements \Psr\Http\Message\MessageInterface
      */
     public function withHeader($name, $value)
     {
+        // Create new message clone
         $newMessage = clone $this;
-        //$newMessage
 
-        // TODO: Implement withHeader() method.
+        // Cast value to array
+        $value = is_array($value) ? $value : array($value);
+
+        // Store header by case-insensitive name, add array with original casing name and values collection
+        $newMessage->headers[strtolower($name)] = array($name, $value);
+
+        // Chaining
+        return $newMessage;
     }
 
     /**
