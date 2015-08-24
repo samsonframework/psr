@@ -70,4 +70,16 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, $newMessage->hasHeader('content-type'));
         $this->assertEquals(false, $newMessage->hasHeader('set-cookie'));
     }
+
+    public function testGetHeaders()
+    {
+        // Create new message with new protocol version
+        $newMessage = $this->message->withHeader('Content-type', 'text/plain');
+        $newMessage = $newMessage->withHeader('content-Encoding', 'gzip');
+
+        $headers = $newMessage->getHeaders();
+        $this->assertArrayHasKey('content-Encoding', $headers);
+        $this->assertArrayHasKey('Content-type', $headers);
+        $this->assertArrayNotHasKey('Content-Encoding', $headers);
+    }
 }

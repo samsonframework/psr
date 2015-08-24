@@ -94,7 +94,12 @@ class Message implements \Psr\Http\Message\MessageInterface
      */
     public function getHeaders()
     {
-        // TODO: Implement getHeaders() method.
+        // Reorganize array with original set case-sensitive header names
+        $result = array();
+        foreach ($this->headers as $key => $data) {
+            $result[$data[0]] = $data[1];
+        }
+        return $result;
     }
 
     /**
