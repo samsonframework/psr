@@ -227,9 +227,7 @@ class Stream implements StreamInterface
      */
     public function write($string)
     {
-        if (!$this->resource) {
-            throw new RuntimeException('No resource available; cannot write');
-        }
+        $this->checkResource();
 
         if (!$this->isWritable()) {
             throw new RuntimeException('Stream is not writable');
@@ -272,9 +270,7 @@ class Stream implements StreamInterface
      */
     public function read($length)
     {
-        if (!$this->resource) {
-            throw new RuntimeException('No resource available; cannot read');
-        }
+        $this->checkResource();
 
         if (!$this->isReadable()) {
             throw new RuntimeException('Stream is not readable');
@@ -343,6 +339,17 @@ class Stream implements StreamInterface
     public function __construct($stream, $mode = 'r')
     {
         $this->setStream($stream, $mode);
+    }
+
+    /**
+     * Check if resource is present
+     * @throws RuntimeException for empty resource var
+     */
+    private function checkResource()
+    {
+        if (!$this->resource) {
+            throw new RuntimeException('No resource available; cannot write');
+        }
     }
 
     /**
