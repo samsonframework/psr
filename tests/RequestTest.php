@@ -10,8 +10,19 @@ namespace tests;
 
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
-    public function testRequest()
-    {
+    /** @var \samsonframework\psr\Request */
+    protected $request;
 
+    /** Tests init */
+    public function setUp()
+    {
+        // Create message instance
+        $this->request = new \samsonframework\psr\Request();
+    }
+
+    public function testGetRequestTarget()
+    {
+        // Check original message protocol version
+        $this->assertEquals('/', $this->request->getRequestTarget());
     }
 }

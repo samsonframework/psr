@@ -16,6 +16,9 @@ use Psr\Http\Message\UriInterface;
  */
 class Request extends Message implements RequestInterface
 {
+    /** @var string Request target */
+    protected $target = '/';
+
     /**
      * Retrieves the message's request target.
      *
@@ -34,7 +37,7 @@ class Request extends Message implements RequestInterface
      */
     public function getRequestTarget()
     {
-        // TODO: Implement getRequestTarget() method.
+        return $this->target;
     }
 
     /**
