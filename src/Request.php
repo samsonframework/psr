@@ -19,6 +19,9 @@ class Request extends Message implements RequestInterface
     /** @var string Request target */
     protected $target = '/';
 
+    /** @var string Request method */
+    protected $method = 'GET';
+
     /**
      * Retrieves the message's request target.
      *
@@ -72,7 +75,7 @@ class Request extends Message implements RequestInterface
      */
     public function getMethod()
     {
-        // TODO: Implement getMethod() method.
+        return $this->method;
     }
 
     /**
@@ -92,7 +95,10 @@ class Request extends Message implements RequestInterface
      */
     public function withMethod($method)
     {
-        // TODO: Implement withMethod() method.
+        // Create new HTTP message
+        $request = clone $this;
+        $request->method = $method;
+        return $request;
     }
 
     /**

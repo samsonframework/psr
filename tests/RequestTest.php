@@ -33,4 +33,18 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/', $this->request->getRequestTarget());
         $this->assertEquals('/test/', $request->getRequestTarget());
     }
+
+    public function testGetMethod()
+    {
+        // Check original message protocol version
+        $this->assertEquals('GET', $this->request->getMethod());
+    }
+
+    public function testWithMethod()
+    {
+        // Check original message protocol version
+        $request = $this->request->withMethod('POSt');
+        $this->assertEquals('GET', $this->request->getMethod());
+        $this->assertEquals('POSt', $request->getMethod());
+    }
 }
