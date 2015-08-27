@@ -115,7 +115,10 @@ class MessageTest extends \PHPUnit_Framework_TestCase
 
     public function testWithBody()
     {
-        $body = new Stream();
+        $this->tmpnam = tempnam(sys_get_temp_dir(), 'psr');
+        file_put_contents($this->tmpnam, 'FOO BAR');
+        $resource = fopen($this->tmpnam, 'wb+');
+        $body = new Stream($resource);
 
         // Create new message with new header
         $newMessage = $this->message->withBody($body);
