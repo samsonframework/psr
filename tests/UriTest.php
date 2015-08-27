@@ -5,7 +5,6 @@
  * Date: 27.08.2015
  * Time: 16:37
  */
-
 namespace tests;
 
 
@@ -21,9 +20,15 @@ class UriTest extends \PHPUnit_Framework_TestCase
         $this->uri = new \samsonframework\psr\Uri();
     }
 
-    public function testGetRequestTarget()
+    public function testGetScheme()
     {
         // Check original message protocol version
-        $this->assertEquals('/', $this->request->getRequestTarget());
+        $this->assertNull('/', $this->uri->getScheme());
+    }
+
+    public function testGetAuthority()
+    {
+        // Check original message protocol version
+        $this->assertNull('/', $this->uri->getScheme());
     }
 }

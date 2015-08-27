@@ -15,6 +15,32 @@ use Psr\Http\Message\UriInterface;
  */
 class Uri implements UriInterface
 {
+    /** @var string */
+    private $scheme = 'http';
+
+    /** @var string */
+    private $userInfo = '';
+
+    /** @var string */
+    private $host = '';
+
+    /** @var string */
+    private $port;
+
+    /** @var string */
+    private $path = '';
+
+    /** @var string */
+    private $query = '';
+
+    /** @var string */
+    private $fragment = '';
+
+    /** @var string */
+    private $uriString;
+
+    /** @var array Collection of allowed schemes and their default ports */
+    private $allowedSchemes = array('http'=>80, 'https'=>443);
 
     /**
      * Retrieve the scheme component of the URI.
@@ -32,7 +58,7 @@ class Uri implements UriInterface
      */
     public function getScheme()
     {
-        // TODO: Implement getScheme() method.
+        return strtolower($this->scheme);
     }
 
     /**
@@ -55,7 +81,20 @@ class Uri implements UriInterface
      */
     public function getAuthority()
     {
-        // TODO: Implement getAuthority() method.
+        return (isset($this->userInfo{0})?$this->userInfo.'@':'') .
+            $this->host .
+            (!$this->isDefaultPort($this->scheme, $this->port)?':'.$this->port:'');
+    }
+
+    /**
+     * Define if passed port is default(80,443) form a scheme
+     * @param string $scheme Scheme for port checking
+     * @param int $port Port number
+     * @return bool True if port is default for this scheme
+     */
+    protected function isDefaultPort($scheme, $port)
+    {
+        return isset($this->allowedSchemes[$scheme]) && $this->allowedSchemes[$scheme] == $port;
     }
 
     /**
@@ -75,7 +114,7 @@ class Uri implements UriInterface
      */
     public function getUserInfo()
     {
-        // TODO: Implement getUserInfo() method.
+        return $this->userInfo;
     }
 
     /**
@@ -91,7 +130,7 @@ class Uri implements UriInterface
      */
     public function getHost()
     {
-        // TODO: Implement getHost() method.
+        return strtolower($this->host);
     }
 
     /**
@@ -111,7 +150,7 @@ class Uri implements UriInterface
      */
     public function getPort()
     {
-        // TODO: Implement getPort() method.
+        return $this->isDefaultPort($this->scheme, $this->port) ? null : $this->port;
     }
 
     /**
