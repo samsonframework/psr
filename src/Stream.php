@@ -13,7 +13,7 @@ use RuntimeException;
 
 class Stream implements StreamInterface
 {
-    /** @var resource */
+    /** @var string|resource */
     protected $resource;
 
     /** @var resource Parent stream */
