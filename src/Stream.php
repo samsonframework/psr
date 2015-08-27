@@ -270,7 +270,7 @@ class Stream implements StreamInterface
      */
     public function read($length)
     {
-        $this->checkResource();
+        $this->checkIfResourceReadable();
 
         $result = fread($this->resource, $length);
         if (false === $result) {
@@ -289,7 +289,7 @@ class Stream implements StreamInterface
      */
     public function getContents()
     {
-        $this->checkResource();
+        $this->checkIfResourceReadable();
 
         $result = stream_get_contents($this->resource);
         if (false === $result) {
@@ -344,6 +344,15 @@ class Stream implements StreamInterface
         if (!$this->resource) {
             throw new RuntimeException('No resource available; cannot write');
         }
+    }
+
+    /**
+     * Check if resource is present and readable
+     * @throws RuntimeException for empty resource var
+     */
+    private function checkIfResourceReadable()
+    {
+        $this->checkResource();
 
         if (!$this->isReadable()) {
             throw new RuntimeException('Stream is not readable');
