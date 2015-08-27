@@ -59,7 +59,10 @@ class Request extends Message implements RequestInterface
      */
     public function withRequestTarget($requestTarget)
     {
-        // TODO: Implement withRequestTarget() method.
+        // Create new HTTP message
+        $request = clone $this;
+        $request->target = $requestTarget;
+        return $request;
     }
 
     /**

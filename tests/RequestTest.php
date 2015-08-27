@@ -25,4 +25,12 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         // Check original message protocol version
         $this->assertEquals('/', $this->request->getRequestTarget());
     }
+
+    public function testWithRequestTarget()
+    {
+        // Check original message protocol version
+        $request = $this->request->withRequestTarget('/test/');
+        $this->assertEquals('/', $this->request->getRequestTarget());
+        $this->assertEquals('/test/', $request->getRequestTarget());
+    }
 }
