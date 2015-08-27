@@ -311,17 +311,16 @@ class Message implements MessageInterface
             // \n not preceded by \r, OR
             // \r not followed by \n, OR
             // \r\n not followed by space or horizontal tab; these are all CRLF attacks
-            if (preg_match("#(?:(?:(?<!\r)\n)|(?:\r(?!\n))|(?:\r\n(?![ \t])))#", $value)) {
-                throw new \InvalidArgumentException('Header value ['.implode(',',$values).'] is invalid');
-            }
-            // Non-visible, non-whitespace characters
-            // 9 === horizontal tab
-            // 10 === line feed
-            // 13 === carriage return
-            // 32-126, 128-254 === visible
-            // 127 === DEL (disallowed)
-            // 255 === null byte (disallowed)
-            if (preg_match('/[^\x09\x0a\x0d\x20-\x7E\x80-\xFE]/', $value)) {
+            if (preg_match("#(?:(?:(?<!\r)\n)|(?:\r(?!\n))|(?:\r\n(?![ \t])))#", $value) ||
+                // Non-visible, non-whitespace characters
+                // 9 === horizontal tab
+                // 10 === line feed
+                // 13 === carriage return
+                // 32-126, 128-254 === visible
+                // 127 === DEL (disallowed)
+                // 255 === null byte (disallowed)
+                preg_match('/[^\x09\x0a\x0d\x20-\x7E\x80-\xFE]/', $value)
+            ) {
                 throw new \InvalidArgumentException('Header value ['.implode(',',$values).'] is invalid');
             }
         }
