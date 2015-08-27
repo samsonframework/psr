@@ -16,7 +16,7 @@ class Stream implements StreamInterface
     /** @var resource */
     protected $resource;
 
-    /** @var resource */
+    /** @var resource Parent stream */
     protected $stream;
 
     /**
