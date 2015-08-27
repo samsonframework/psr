@@ -11,11 +11,10 @@ namespace tests;
  * Created by Vitaly Iegorov <egorov@samsonos.com>
  * on 04.08.14 at 16:42
  */
-use PHPUnit_Framework_TestCase as TestCase;
 use ReflectionProperty;
 use samsonframework\psr\Stream;
 
-class StreamTest extends TestCase
+class StreamTest extends \PHPUnit_Framework_TestCase
 {
     public $tmpnam;
 
