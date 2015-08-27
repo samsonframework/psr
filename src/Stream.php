@@ -16,6 +16,9 @@ class Stream implements StreamInterface
     /** @var resource */
     protected $resource;
 
+    /** @var resource */
+    protected $stream;
+
     /**
      * Attach a new stream/resource to the instance.
      *
