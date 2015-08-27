@@ -103,6 +103,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $newMessage4 = $newMessage3->withAddedHeader('Content-Encoding', 'gzip'."\r");
     }
 
+
     public function testWithoutHeader()
     {
         // Create new message with new header

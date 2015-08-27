@@ -186,9 +186,7 @@ class Message implements MessageInterface
         // Cast value to array
         $value = is_array($value) ? $value : array($value);
 
-        if (!$this->isValidHeaderValue($value)) {
-            throw new \InvalidArgumentException('Header['.$name.'] value ['.implode(',',$value).'] is invalid');
-        }
+        $this->isValidHeaderValue($value);
 
         // Store header by case-insensitive name, add array with original casing name and values collection
         $newMessage->headers[strtolower($name)] = array($name, $value);
@@ -224,9 +222,7 @@ class Message implements MessageInterface
         // Cast value to array
         $value = is_array($value) ? $value : array($value);
 
-        if (!$this->isValidHeaderValue($value)) {
-            throw new \InvalidArgumentException('Header['.$name.'] value ['.implode(',',$value).'] is invalid');
-        }
+        $this->isValidHeaderValue($value);
 
         // There were no such header before
         if ($header === null) {
@@ -305,7 +301,7 @@ class Message implements MessageInterface
      * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
      * @see https://github.com/zendframework/zend-diactoros/blob/master/src/HeaderSecurity.php
      * @param string[] $values
-     * @return bool
+     * @throws \InvalidArgumentException for invalid header names or values.
      */
     protected function isValidHeaderValue(array $values)
     {
@@ -316,7 +312,7 @@ class Message implements MessageInterface
             // \r not followed by \n, OR
             // \r\n not followed by space or horizontal tab; these are all CRLF attacks
             if (preg_match("#(?:(?:(?<!\r)\n)|(?:\r(?!\n))|(?:\r\n(?![ \t])))#", $value)) {
-                return false;
+                throw new \InvalidArgumentException('Header value ['.implode(',',$values).'] is invalid');
             }
             // Non-visible, non-whitespace characters
             // 9 === horizontal tab
@@ -326,10 +322,9 @@ class Message implements MessageInterface
             // 127 === DEL (disallowed)
             // 255 === null byte (disallowed)
             if (preg_match('/[^\x09\x0a\x0d\x20-\x7E\x80-\xFE]/', $value)) {
-                return false;
+                throw new \InvalidArgumentException('Header value ['.implode(',',$values).'] is invalid');
             }
         }
-        return true;
     }
 
     /**
