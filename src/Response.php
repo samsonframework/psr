@@ -14,7 +14,7 @@ use Psr\Http\Message\ResponseInterface;
  * HTTP Response
  * @package samsonframework\psr
  */
-class Response implements ResponseInterface {
+class Response extends Message implements ResponseInterface {
 
 	/**
 	 * Gets the response status code.
@@ -52,7 +52,6 @@ class Response implements ResponseInterface {
 	public function withStatus($code, $reasonPhrase = '')
 	{
 		// TODO: Implement withStatus() method.
-		return $this;
 	}
 
 	/**
