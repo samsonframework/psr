@@ -23,12 +23,11 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function testGetScheme()
     {
         // Check original message protocol version
-        $this->assertNull('/', $this->uri->getScheme());
+        $this->assertEquals('http', $this->uri->getScheme());
     }
 
     public function testGetAuthority()
     {
-        // Check original message protocol version
-        $this->assertNull('/', $this->uri->getScheme());
+
     }
 }

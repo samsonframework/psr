@@ -20,10 +20,10 @@ class Response extends Message implements ResponseInterface {
 	private $statusCode = 200;
 
 	/** @var string Response reason phrase */
-	private $reasonPrase;
+	private $reasonPhrase;
 
 	/** @var array List of response reason phrases as suggested in the HTTP specification */
-	private $reasonPrases = array(
+	private $reasonPhrases = array(
 		100 => 'Continue',
 	    101 => 'Switching Protocols',
         200 => 'OK',
@@ -105,7 +105,7 @@ class Response extends Message implements ResponseInterface {
 
 		$newResponse = clone $this;
 		$newResponse->statusCode = $code;
-		$newResponse->reasonPrase = ($reasonPhrase !== '')?$newResponse->getReasonPhrase():$reasonPhrase;
+		$newResponse->reasonPhrase = ($reasonPhrase !== '')?$newResponse->getReasonPhrase():$reasonPhrase;
 		return $newResponse;
 	}
 
@@ -124,7 +124,7 @@ class Response extends Message implements ResponseInterface {
 	 */
 	public function getReasonPhrase()
 	{
-		return isset($this->reasonPrases[$this->statusCode])?$this->reasonPrases[$this->statusCode]:'';
+		return isset($this->reasonPhrases[$this->statusCode])?$this->reasonPhrases[$this->statusCode]:'';
 	}
 
 }
