@@ -150,7 +150,7 @@ class Uri implements UriInterface
      */
     public function getPort()
     {
-        return $this->isDefaultPort($this->scheme, $this->port) ? null : $this->port;
+        return $this->isDefaultPort($this->scheme, $this->port) ? null : (int)$this->port;
     }
 
     /**
@@ -180,7 +180,7 @@ class Uri implements UriInterface
      */
     public function getPath()
     {
-        // TODO: Implement getPath() method.
+        return $this->path;
     }
 
     /**
@@ -205,7 +205,7 @@ class Uri implements UriInterface
      */
     public function getQuery()
     {
-        // TODO: Implement getQuery() method.
+        return $this->query;
     }
 
     /**
@@ -226,7 +226,7 @@ class Uri implements UriInterface
      */
     public function getFragment()
     {
-        // TODO: Implement getFragment() method.
+        return $this->fragment;
     }
 
     /**
@@ -246,7 +246,13 @@ class Uri implements UriInterface
      */
     public function withScheme($scheme)
     {
-        // TODO: Implement withScheme() method.
+        if (isset($this->allowedSchemes[strtolower($scheme)]) || empty($scheme)) {
+            $uri = clone $this;
+            $uri->scheme = $scheme;
+            return $uri;
+        } else {
+            throw new \InvalidArgumentException('Cannot create URI with specified scheme['.$scheme.']');
+        }
     }
 
     /**
@@ -265,6 +271,7 @@ class Uri implements UriInterface
      */
     public function withUserInfo($user, $password = null)
     {
+
         // TODO: Implement withUserInfo() method.
     }
 
