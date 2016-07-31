@@ -7,7 +7,7 @@
  */
 namespace samsonframework\psr;
 
-class Stream extends \Zend\Diactoros\Stream
+class UploadedFile extends \Zend\Diactoros\UploadedFile
 {
 
 }
